@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+@theme {
+  --color-midnight: #121063;
+  --color-tahiti: #3ab7bf;
+  --color-bermuda: #78dcca;
+  --color-maroon: #8a0000;
+  --color-gold: #ffc420;
+  --color-darkmaroon: #3c0000;
+}
+
+:root {
+  font-family: "Libre Franklin", Helvetica, Arial, sans-serif;
+  
+  line-height: 1.5;
+  font-weight: 400;
+
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #ffffff;
+ /*
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  */
+}
+
+/*
+// <weight>: Use a value from 100 to 900
+// <uniquifier>: Use a unique and descriptive class name
+*/
+
+.libre-franklin-bold{
+  font-family: "Libre Franklin", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+a {
+  font-family: inherit;
+  font-weight: 500;
+  color: #ffffff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #ffffff;
+}
+
+body {
+  font-family: inherit;
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: #f1f1f1
+}
+
+.text-shadow {
+  text-shadow: 3px 3px 0px rgba(0, 0, 0, .75);
+}
+.text-outline{
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 1),
+  -2px -2px 0px rgba(0, 0, 0, 1),
+  2px -2px 0px rgba(0, 0, 0, 1),
+  -2px 2px 0px rgba(0, 0, 0, 1);
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+  font-family: inherit;
+}
+
+button {
+  font-family: inherit;
+  /*
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  */
+}
+
+/*
+button:hover {
+  border-color: black;
+}
+
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+*/
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #ffffff;
+    background-color: #ffffff;
+  }
+  a:hover {
+
+    color: #ffffff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+

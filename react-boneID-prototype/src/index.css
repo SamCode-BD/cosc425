@@ -1,0 +1,38 @@
+.form-container{
+  display: flex;
+  justify-content: flex-start;
+  height: 100%;
+  margin-top: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.bone-form {
+  min-height: 700px;
+  width: 500px;
+  text-align: center;
+  margin-left: 10px;
+  background-color: hsl(0, 0%, 80%);
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px rgb(116, 116, 116);
+  border: 2px inset black;
+}
+
+.indiv-form {
+  min-height: 700px;
+  width: 250px;
+  text-align: center;
+  background-color: hsl(0, 0%, 85%);
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px rgb(116, 116, 116);
+  border: 3px inset black;
+  position: relative;
+}
+
+.menu-button {
+  height: 100px;
+  width: 250px;
+}
+
+body {
+  background-color: hsl(0, 0%, 89%);
+}
