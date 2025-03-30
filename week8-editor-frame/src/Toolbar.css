@@ -1,0 +1,25 @@
+.toolbar {
+    background-color:hsl(0, 0%, 0%);
+    width: 100%;
+    display: flex;
+    flex-grow: 1;
+}
+
+.button-container {
+    height: auto;
+    width: 90%;
+    display: flex;
+    justify-content: flex-start;
+    padding-block: 10px;
+    margin-block: auto;
+    margin-inline: auto;
+    /*background-color:hsl(0, 0%, 27%)*/
+}
+
+.toolbar-button {
+    /*background-color:hsl(0, 0%, 33%);*/
+    flex-grow: 1;
+    margin-inline: 50px;
+    text-align: center;
+    height: auto;
+}

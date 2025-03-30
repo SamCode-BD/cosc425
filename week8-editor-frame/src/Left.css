@@ -1,0 +1,44 @@
+.left {
+    background-color:hsl(0, 0%, 37%);
+    width: 20%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 4fr 1fr 2fr;
+
+}
+
+.exit-button {
+    color: white;
+    background-color:hsl(0, 1%, 35%);
+    grid-row: span 1;
+    grid-column: 1 / 2;
+}
+
+.title {
+    color: white;
+    background-color: hsl(0, 0%, 53%);
+    grid-row: span 1;
+    grid-column: 1 / 2;
+}
+
+.fields {
+    color: white;
+    background-color: hsl(0, 0%, 66%);
+    grid-row: span 1;
+    grid-column: 1 / 2;
+}
+
+.tax-button {
+    color: white;
+    background-color: hsl(0, 0%, 48%);
+    grid-row: span 1;
+    grid-column: 1 / 2;
+}
+
+.save-button {
+    color: white;
+    background-color: hsl(0, 0%, 33%);
+    grid-row: span 1;
+    grid-column: 1 / 2;
+}
