@@ -23,16 +23,20 @@ function CNEditor() {
             //return(<CNMandibular/>);
             return(<div>mandibular</div>);
         }
+        else if(context == "macromorphoscopics") {
+            return<div>macromorphoscopics</div>
+        }
 
     }
 
     return(<div className = "editor-window">
-        <h2 className = "editor-title">cranial nonmetrics</h2>
+        <p className = "editor-title">Cranial Nonmetrics</p>
         <div className = "editor-context-buttons">
             <button onClick={() => setContext("facial")}>Facial</button>
             <button onClick={() => setContext("lateral")}>Lateral</button>
             <button onClick={() => setContext("basilar")}>Basilar</button>
             <button onClick={() => setContext("mandibular")}>Mandibular</button>
+            <button onClick={() => setContext("macromorphoscopics")}>Macromorphoscopics</button>
         </div>
         {setWindow()}
         </div>)

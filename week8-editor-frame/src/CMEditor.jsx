@@ -20,7 +20,7 @@ function CMEditor(){
     }
 
     return(<div className="editor-window">
-        <h2 className = "editor-title">craniometrics</h2>
+        <p className = "editor-title">Craniometrics</p>
         <div className = "editor-context-buttons">
             <button onClick={() => setMetricsType("cranium")}>Cranium</button>
             <button onClick={() => setMetricsType("mandible")}>Mandible</button>

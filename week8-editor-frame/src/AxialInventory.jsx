@@ -39,15 +39,15 @@ function AxialInventory(props) {
             <InventoryEntry name="R12" numBoxes="2" submenu="Ribs"/>
             </>)
         }
-        else if(activeSubmenu == "axial-other") {
+        else if(activeSubmenu == "axial-general") {
             return(<>
-                <InventoryEntry name="Sacrum" numBoxes="1" submenu="Other"/>
-                <InventoryEntry name="Coccyx" numBoxes="1" submenu="Other"/>
-                <InventoryEntry name="Illium" numBoxes="2" submenu="Other"/>
-                <InventoryEntry name="Ischium" numBoxes="2" submenu="Other"/>
-                <InventoryEntry name="Pubis" numBoxes="2" submenu="Other"/>
-                <InventoryEntry name="Acetabulum" numBoxes="2" submenu="Other"/>
-                <InventoryEntry name="Auricular Surf" numBoxes="2" submenu="Other"/>
+                <InventoryEntry name="Sacrum" numBoxes="1" submenu="axial-general"/>
+                <InventoryEntry name="Coccyx" numBoxes="1" submenu="axial-general"/>
+                <InventoryEntry name="Illium" numBoxes="2" submenu="axial-general"/>
+                <InventoryEntry name="Ischium" numBoxes="2" submenu="axial-general"/>
+                <InventoryEntry name="Pubis" numBoxes="2" submenu="axial-general"/>
+                <InventoryEntry name="Acetabulum" numBoxes="2" submenu="axial-general"/>
+                <InventoryEntry name="Auricular Surf" numBoxes="2" submenu="axial-general"/>
                 </> )
         }
         else if(activeSubmenu == "hyoid") {
@@ -63,7 +63,7 @@ function AxialInventory(props) {
             <div className = "inventory-buttons">
                 <button onClick={() => {setActiveSubmenu("vertebrae")}}>Vertebrae</button>
                 <button onClick={() => {setActiveSubmenu("ribs")}}>Ribs</button>
-                <button onClick={() => {setActiveSubmenu("axial-other")}}>Other</button>
+                <button onClick={() => {setActiveSubmenu("axial-general")}}>General</button>
                 <button onClick={() => {setActiveSubmenu("hyoid")}}>Hyoid</button>
             </div>
             <div className = "inventory-scroll">

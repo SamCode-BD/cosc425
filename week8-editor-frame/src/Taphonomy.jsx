@@ -13,7 +13,14 @@ function Taphonomy(props) {
     const getSubtitle = () => {
         let str = "";
         let submenuOfActiveBone = inventoryContext.submenuOfActiveBone[0].toUpperCase() + inventoryContext.submenuOfActiveBone.slice(1);
+        if(submenuOfActiveBone == "App-general") {
+            submenuOfActiveBone = "Appendicular";
+        }
+        else if(submenuOfActiveBone == "Axial-general") {
+            submenuOfActiveBone = "Axial";
+        }
         str += submenuOfActiveBone + " - " + inventoryContext.activeBone;
+
         return(str);
     }
 

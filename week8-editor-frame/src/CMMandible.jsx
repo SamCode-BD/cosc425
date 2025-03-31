@@ -1,21 +1,13 @@
 import MetricsListEntry from "./MetricsListEntry.jsx"
+import {craniometrics_list} from "./craniometrics-list.jsx"
 function CMMandible() {
     return(<div className="editor-scroll">
-        <MetricsListEntry name = "mandible"/>
-        <MetricsListEntry name = "mandible"/>
-        <MetricsListEntry name = "mandible"/>
-        <MetricsListEntry name = "mandible"/>
-        <MetricsListEntry name = "mandible"/>
-        <MetricsListEntry name = "mandible"/>
-        <MetricsListEntry name = "mandible"/>
-        <MetricsListEntry name = "mandible"/>
-        <MetricsListEntry name = "mandible"/>
-        <MetricsListEntry name = "mandible"/>
-        <MetricsListEntry name = "mandible"/>
-        <MetricsListEntry name = "mandible"/>
-        <MetricsListEntry name = "mandible"/>
-        <MetricsListEntry name = "mandible"/>
-        <MetricsListEntry name = "mandible"/>
+            {craniometrics_list.metrics_mandible.map((info, i) =>
+        <MetricsListEntry name={info.split("\t")[0]} 
+                          landmarks={info.split("\t")[1]}
+                          abbv={info.split("\t")[2]}
+                          key={i}/>
+        )}
         </div>)
 }
 export default CMMandible

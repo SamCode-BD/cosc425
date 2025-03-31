@@ -9,13 +9,13 @@ function ButtonContainer(props) {
     if(toolbarContext == "main") {
         return(<div className = "button-container">
                 <div className = "toolbar-button">
-                    <button onClick={() => setToolbarContext("cranium")}>cranium</button>
+                    <button onClick={() => setToolbarContext("cranium")}>Cranium</button>
                 </div>
                 <div className = "toolbar-button">
-                    <button onClick={() => setToolbarContext("postcranial")}>postcranial</button>
+                    <button onClick={() => setToolbarContext("postcranial")}>Postcranial</button>
                 </div>
                 <div className = "toolbar-button">
-                    <button>dental</button>
+                    <button>Dental</button>
                 </div>
         </div>)
     }

@@ -3,11 +3,19 @@ import InventoryEntry from "./InventoryEntry.jsx";
 import React, {useState} from 'react'
 function AppendicularInventory(props) {
 
-    let [activeSubmenu, setActiveSubmenu] = useState("other");
+    let [activeSubmenu, setActiveSubmenu] = useState("general");
 
     const getScroll = () => {
-        if(activeSubmenu == "other") {
-            return(<></>)
+        if(activeSubmenu == "general") {
+            return(<>
+                <InventoryEntry name="Humerus" numBoxes="10" submenu="app-general"/>
+                <InventoryEntry name="Radius" numBoxes="10" submenu="app-general"/>
+                <InventoryEntry name="Ulna" numBoxes="10" submenu="app-general"/>
+                <InventoryEntry name="Femur" numBoxes="10" submenu="app-general"/>
+                <InventoryEntry name="Patella" numBoxes="2" submenu="app-general"/>
+                <InventoryEntry name="Tibia" numBoxes="10" submenu="app-general"/>
+                <InventoryEntry name="Fibula" numBoxes="10" submenu="app-general"/>
+            </>)
         }
         else if(activeSubmenu == "shoulder") {
             return(<>
@@ -29,7 +37,7 @@ function AppendicularInventory(props) {
             Appendicular Inventory
         </div>
         <div className = "inventory-buttons">
-            <button onClick={() => {setActiveSubmenu("other")}}>Other</button>
+            <button onClick={() => {setActiveSubmenu("general")}}>General</button>
             <button onClick={() => {setActiveSubmenu("shoulder")}}>Shoulder</button>
             <button onClick={() => {setActiveSubmenu("sternum")}}>Sternum</button>
         </div>

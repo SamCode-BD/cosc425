@@ -94,6 +94,53 @@ function InventoryEntry(props) {
         }
     }
 
+    const getAppendicularBoxes = () => {
+        if(props.numBoxes == "2") {
+            return(<>
+            <div className="appendicular-boxes">
+                <p></p>
+                <p>L</p>
+                <p>R</p>
+
+                <p>Prox Epi</p>
+                <input type="checkbox"/>
+                <input type="checkbox"/>
+            </div> 
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            </>)
+        }
+        else if(props.numBoxes == "10") {
+            return(<div className="appendicular-boxes">
+            <p></p>
+            <p>L</p>
+            <p>R</p>
+
+            <p>Prox Epi</p>
+            <input type="checkbox"/>
+            <input type="checkbox"/>
+
+            <p>Prox 1/3</p>
+            <input type="checkbox"/>
+            <input type="checkbox"/>
+
+            <p>Mid 1/3</p>
+            <input type="checkbox"/>
+            <input type="checkbox"/>
+
+            <p>Dist 1/3</p>
+            <input type="checkbox"/>
+            <input type="checkbox"/>
+
+            <p>Dist Epi</p>
+            <input type="checkbox"/>
+            <input type="checkbox"/>
+            </div>)
+        }
+    }
+
     const getBoxes = () => {
         if(props.numBoxes == "1") {
             return (
@@ -152,13 +199,29 @@ function InventoryEntry(props) {
         }
     }
 
-    return(
-    <div className="inventory-entry" onMouseEnter={() => {setButtonActive(true)}}
-                                     onMouseLeave={() => {setButtonActive(false)}}>
-        <p>{props.name}</p>
-        {getInputElements()}
-        {getButton()}
-    </div>)
+    if(props.submenu == "app-general") {
+        return(<>
+        <div className="inventory-title">
+            {props.name}
+        </div>
+        <div className="inventory-entry appendicular" onMouseEnter={() => {setButtonActive(true)}}
+                                                      onMouseLeave={() => {setButtonActive(false)}}>
+            {getAppendicularBoxes()}
+            {getButton()}
+        </div>
+        </>
+            
+        )
+    }
+    else {
+        return(
+        <div className="inventory-entry" onMouseEnter={() => {setButtonActive(true)}}
+                                        onMouseLeave={() => {setButtonActive(false)}}>
+            <p>{props.name}</p>
+            {getInputElements()}
+            {getButton()}
+        </div>)
+    }
 }
 
 export default InventoryEntry
