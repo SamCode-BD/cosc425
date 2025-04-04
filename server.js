@@ -1,7 +1,10 @@
 const express = require('express');
 const mysql = require('mysql2');
 const app = express();
+const bcrypt = require('bcrypt');
 const port = 3000;
+const jwt = require('jsonwebtoken');
+const SECRET_KEY = 'SecretKey';
 
 // MySQL connection setup
 const db = mysql.createConnection({
@@ -10,6 +13,7 @@ const db = mysql.createConnection({
   password: 'ZhPF13x6SU',
   database: 'sql5764904',
 });
+
 
 db.connect((err) => {
   if (err) {
@@ -214,31 +218,84 @@ app.get('/museums', (req, res) => {
   });
 });
 
-// --- User Routes ---
-app.get('/users', (req, res) => {
-  db.query('SELECT * FROM user', (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json(results);
-  });
-});
-
-app.post('/users', (req, res) => {
+app.post('/users', async (req, res) => {
   const { name, email, password, roles } = req.body;
 
+  // Input validation
   if (!name || !email || !password || !roles) {
-    return res.status(400).json({ message: 'Name, Email, Password, and Roles are required' });
+      return res.status(400).json({ message: 'Name, Email, Password, and Roles are required' });
   }
 
-  db.query('INSERT INTO user (name, email, password, roles) VALUES (?, ?, ?, ?)', 
-    [name, email, password, roles], 
-    (err, result) => {
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: 'Invalid email format' });
+  }
+
+  // Validate password strength (example: minimum 8 characters)
+  if (password.length < 8) {
+      return res.status(400).json({ message: 'Password must be at least 8 characters long' });
+  }
+
+  try {
+      // Hash the password
+      const hashedPassword = await bcrypt.hash(password, 10); // 10 salt rounds
+
+      // Insert into database
+      db.query('INSERT INTO user (name, email, password, roles) VALUES (?, ?, ?, ?)', 
+          [name, email, hashedPassword, roles], 
+          (err, result) => {
+              if (err) {
+                  // Handle unique email constraint or other errors
+                  if (err.code === 'ER_DUP_ENTRY') {
+                      return res.status(400).json({ message: 'Email is already in use' });
+                  }
+                  return res.status(500).json({ error: 'Database error' });
+              }
+
+              // Send back the response without sending sensitive data like password
+              res.status(201).json({ id: result.insertId, name, email, roles });
+          }
+      );
+  } catch (error) {
+      console.error('Error hashing password:', error);
+      return res.status(500).json({ error: 'Error hashing password' });
+  }
+});
+
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required' });
+  }
+
+  db.query('SELECT * FROM user WHERE email = ?', [email], async (err, results) => {
       if (err) {
-        return res.status(500).json({ error: err.message });
+          return res.status(500).json({ error: err.message });
       }
-      res.status(201).json({ id: result.insertId, name, email, roles });
-    });
+
+      if (results.length === 0) {
+          return res.status(401).json({ message: 'Invalid credentials' });
+      }
+
+      const user = results[0];  // assuming results returns an array of users
+
+      try {
+          const isPasswordMatch = await bcrypt.compare(password, user.password);
+
+          if (isPasswordMatch) {
+              // Issue JWT
+              const token = jwt.sign({ userId: user.user_id, email: user.email }, SECRET_KEY, { expiresIn: '1h' });
+              return res.status(200).json({ message: 'Login successful', token });
+          } else {
+              return res.status(401).json({ message: 'Invalid credentials' });
+          }
+      } catch (error) {
+          console.error('Error comparing passwords:', error);
+          return res.status(500).json({ error: 'Error during login' });
+      }
+  });
 });
 
 // --- Start the server ---
