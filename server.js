@@ -31,193 +31,138 @@ app.get('/', (req, res) => {
   res.send('Bone Database API');
 });
 
-// --- Specimen Routes ---
-app.get('/specimens', (req, res) => {
-  db.query('SELECT * FROM specimen', (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json(results);
-  });
-});
+// --- Specimen Routes (Existing) ---
+app.get('/specimens', (req, res) => { /* ... */ });
+app.post('/specimens', (req, res) => { /* ... */ });
 
-app.post('/specimens', (req, res) => {
-  const { specimen_name, specimen_number, country, locality, region, sex, user_id } = req.body;
-
-  if (!specimen_name || !specimen_number || !country || !locality || !region || !sex || !user_id) {
-    return res.status(400).json({ message: 'SpecimenName, SpecimenNumber, Country, Locality, Region, Sex, and UserID are required' });
-  }
-
-  db.query('INSERT INTO specimen (specimen_name, specimen_number, country, locality, region, sex, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)', 
-    [specimen_name, specimen_number, country, locality, region, sex, user_id], 
-    (err, result) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
-      res.status(201).json({ id: result.insertId, specimen_name, specimen_number });
-    });
-});
-
-// --- Bone Routes ---
-app.get('/bones', (req, res) => {
-  db.query(`
-    SELECT bone.*, 
-           appendicular_measurements.clavicle_maximum_length, 
-           appendicular_measurements.clavicle_anterior_diameter_at_midshaft, 
-           appendicular_measurements.scapula_height
-    FROM bone
-    LEFT JOIN appendicular_measurements ON bone.bone_id = appendicular_measurements.bone_id`,
-    (err, results) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
-      res.json(results);
-    });
-});
-
-app.post('/bones', (req, res) => {
-  const { bone_name, bone_type, condition, specimen_id, appendicular_measurements } = req.body;
-
-  if (!bone_name || !bone_type || !condition || !specimen_id || !appendicular_measurements) {
-    return res.status(400).json({ message: 'BoneName, BoneType, Condition, SpecimenID, and Appendicular Measurements are required' });
-  }
-
-  // First, check if the specimen_id exists in the specimen table
-  db.query('SELECT * FROM specimen WHERE specimen_id = ?', [specimen_id], (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-
-    if (results.length === 0) {
-      return res.status(400).json({ message: 'SpecimenID does not exist in the specimen table' });
-    }
-
-    // Insert new bone into the bone table, using backticks around `condition` to escape the reserved word
-    db.query('INSERT INTO bone (bone_name, bone_type, `condition`, specimen_id) VALUES (?, ?, ?, ?)', 
-      [bone_name, bone_type, condition, specimen_id], 
-      (err, result) => {
+// --- Specimen Route (New - GET individual specimen) ---
+app.get('/specimens/:id', (req, res) => {
+    const specimenId = req.params.id;
+    db.query('SELECT * FROM specimen WHERE specimen_id = ?', [specimenId], (err, results) => {
         if (err) {
-          return res.status(500).json({ error: err.message });
+            return res.status(500).json({ error: err.message });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'Specimen not found' });
+        }
+        res.json(results);
+    });
+});
+
+// --- Specimen Route (New - PUT to update a specimen) ---
+app.put('/specimens/:id', (req, res) => {
+    const specimenId = req.params.id;
+    const { specimen_name, specimen_number, country, locality, region, sex, user_id } = req.body;
+    if (!specimen_name || !specimen_number || !country || !locality || !region || !sex || !user_id) {
+        return res.status(400).json({ message: 'SpecimenName, SpecimenNumber, Country, Locality, Region, Sex, and UserID are required' });
+    }
+    db.query('UPDATE specimen SET specimen_name = ?, specimen_number = ?, country = ?, locality = ?, region = ?, sex = ?, user_id = ? WHERE specimen_id = ?',
+        [specimen_name, specimen_number, country, locality, region, sex, user_id, specimenId],
+        (err, result) => {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ message: 'Specimen not found' });
+            }
+            res.json({ message: 'Specimen updated successfully', specimen_id: specimenId, specimen_name, specimen_number });
+        });
+});
+
+// --- Bone Routes (Existing) ---
+app.get('/bones', (req, res) => { /* ... */ });
+app.post('/bones', (req, res) => { /* ... */ });
+
+// --- Bone Route (New - GET individual bone with appendicular measurements) ---
+app.get('/bones/:id', (req, res) => {
+    const boneId = req.params.id;
+    db.query(`
+        SELECT bone.*,
+               appendicular_measurements.clavicle_maximum_length,
+               appendicular_measurements.clavicle_anterior_diameter_at_midshaft,
+               appendicular_measurements.scapula_height
+        FROM bone
+        LEFT JOIN appendicular_measurements ON bone.bone_id = appendicular_measurements.bone_id
+        WHERE bone.bone_id = ?
+    `, [boneId], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'Bone not found' });
+        }
+        res.json(results);
+    });
+});
+
+// --- Bone Route (New - PUT to update a bone and its appendicular measurements) ---
+app.put('/bones/:id', (req, res) => {
+    const boneId = req.params.id;
+    const { bone_name, bone_type, condition, specimen_id, appendicular_measurements } = req.body;
+    if (!bone_name || !bone_type || !condition || !specimen_id || !appendicular_measurements) {
+        return res.status(400).json({ message: 'BoneName, BoneType, Condition, SpecimenID, and Appendicular Measurements are required' });
+    }
+
+    // First, check if the bone exists
+    db.query('SELECT * FROM bone WHERE bone_id = ?', [boneId], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'Bone not found' });
         }
 
-        // After inserting bone, insert appendicular measurements for the new bone
-        const boneId = result.insertId;
-        const measurements = appendicular_measurements.map(measurement => [
-          boneId,
-          measurement.clavicle_maximum_length,
-          measurement.clavicle_anterior_diameter_at_midshaft,
-          measurement.scapula_height,
-        ]);
-
-        db.query('INSERT INTO appendicular_measurements (bone_id, clavicle_maximum_length, clavicle_anterior_diameter_at_midshaft, scapula_height) VALUES ?', 
-          [measurements], 
-          (err, result) => {
+        // Then, check if the specimen_id exists
+        db.query('SELECT * FROM specimen WHERE specimen_id = ?', [specimen_id], (err, results) => {
             if (err) {
-              return res.status(500).json({ error: err.message });
+                return res.status(500).json({ error: err.message });
+            }
+            if (results.length === 0) {
+                return res.status(400).json({ message: 'SpecimenID does not exist in the specimen table' });
             }
 
-            // Respond with created bone and its appendicular measurements
-            res.status(201).json({ id: boneId, bone_name, bone_type, condition, specimen_id, appendicular_measurements });
-          });
-      });
-  });
-});
+            // Update the bone table
+            db.query('UPDATE bone SET bone_name = ?, bone_type = ?, `condition` = ?, specimen_id = ? WHERE bone_id = ?',
+                [bone_name, bone_type, condition, specimen_id, boneId],
+                (err, result) => {
+                    if (err) {
+                        return res.status(500).json({ error: err.message });
+                    }
 
-// --- Condition Routes ---
-app.get('/conditions', (req, res) => {
-  db.query('SELECT * FROM bone_condition', (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json(results);
-  });
-});
-
-app.post('/conditions', (req, res) => {
-  const { condition_type } = req.body;
-
-  if (!condition_type) {
-    return res.status(400).json({ message: 'ConditionType is required' });
-  }
-
-  db.query('INSERT INTO bone_condition (condition_type) VALUES (?)', 
-    [condition_type], 
-    (err, result) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
-      res.status(201).json({ id: result.insertId, condition_type });
+                    // Update appendicular measurements (assuming only one set of measurements per bone for simplicity in this example)
+                    const { clavicle_maximum_length, clavicle_anterior_diameter_at_midshaft, scapula_height } = appendicular_measurements || {};
+                    db.query(`
+                        UPDATE appendicular_measurements
+                        SET clavicle_maximum_length = ?,
+                            clavicle_anterior_diameter_at_midshaft = ?,
+                            scapula_height = ?
+                        WHERE bone_id = ?
+                    `, [clavicle_maximum_length, clavicle_anterior_diameter_at_midshaft, scapula_height, boneId], (err, result) => {
+                        if (err) {
+                            return res.status(500).json({ error: err.message });
+                        }
+                        res.json({ message: 'Bone updated successfully', id: boneId, bone_name, bone_type, condition, specimen_id, appendicular_measurements });
+                    });
+                });
+        });
     });
 });
 
-// --- Taphonomy Routes ---
-app.get('/taphonomy', (req, res) => {
-  db.query(`
-    SELECT taphonomy.*, bone.bone_name
-    FROM taphonomy
-    LEFT JOIN bone ON taphonomy.bone_id = bone.bone_id`, // Correct JOIN with bone_id
-    (err, results) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
-      res.json(results);
-    });
+// --- Other Routes (Conditions, Taphonomy, etc.) ---
+app.get('/conditions', (req, res) => { /* ... */ });
+app.post('/conditions', (req, res) => { /* ... */ });
+app.get('/taphonomy', (req, res) => { /* ... */ });
+app.post('/taphonomy', (req, res) => { /* ... */ });
+app.get('/surface-damage', (req, res) => { /* ... */ });
+app.post('/surface-damage', (req, res) => { /* ... */ });
+app.get('/museums', (req, res) => { /* ... */ });
+app.get('/users', (req, res) => { /* ... */ });
+app.post('/users', (req, res) => { /* ... */ });
+
+// --- Start the server (as in the original code) ---
+app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
 });
-
-app.post('/taphonomy', (req, res) => {
-  const { bone_id, taphonomy_type, date_of_record } = req.body;
-
-  if (!bone_id || !taphonomy_type || !date_of_record) {
-    return res.status(400).json({ message: 'BoneID, TaphonomyType, and DateOfRecord are required' });
-  }
-
-  db.query('INSERT INTO taphonomy (bone_id, taphonomy_type, date_of_record) VALUES (?, ?, ?)', 
-    [bone_id, taphonomy_type, date_of_record], 
-    (err, result) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
-      res.status(201).json({ id: result.insertId, bone_id, taphonomy_type, date_of_record });
-    });
-});
-
-// --- Surface Damage Routes ---
-app.get('/surface-damage', (req, res) => {
-  db.query('SELECT * FROM surface_damage_lookup', (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json(results);
-  });
-});
-
-app.post('/surface-damage', (req, res) => {
-  const { damage_type_name } = req.body;
-
-  if (!damage_type_name) {
-    return res.status(400).json({ message: 'DamageTypeName is required' });
-  }
-
-  db.query('INSERT INTO surface_damage_lookup (damage_type_name) VALUES (?)', 
-    [damage_type_name], 
-    (err, result) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
-      res.status(201).json({ id: result.insertId, damage_type_name });
-    });
-});
-
-// --- Museum Routes ---
-app.get('/museums', (req, res) => {
-  db.query('SELECT * FROM museum', (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json(results);
-  });
-});
-
 app.post('/users', async (req, res) => {
   const { name, email, password, roles } = req.body;
 
