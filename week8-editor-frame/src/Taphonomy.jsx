@@ -68,6 +68,15 @@ function Taphonomy(props) {
                 </div>
             </div>)
         }
+        if(activeSubmenu == "comments") {
+            return (<div className="taphonomy-contents">
+                <div className="tc-comments">
+                    <h3>Comments:</h3>
+                    <textarea className="taphonomy-comments-box"/>
+                    <button>Save Comments</button>
+                </div>
+            </div>)
+        }
     }
 
     if(inventoryContext.taphonomyActive) {
@@ -84,11 +93,16 @@ function Taphonomy(props) {
                     <input className = "condition-exposure-item" type="checkbox"/>
                 </div>
                 <div className = "taphonomy-context-buttons">
-                    <button onClick={() => setActiveSubmenu("bone color")}>Bone Color</button>
-                    <button onClick={() => setActiveSubmenu("staining")}>Staining</button>
-                    <button onClick={() => setActiveSubmenu("surface damage")}>Surface Damage</button>
-                    <button onClick={() => setActiveSubmenu("adherent materials")}>Adherent Materials</button>
-                    <button onClick={() => setActiveSubmenu("modifications")}>Modifications</button>
+                    <div className = "taphonomy-main-buttons">
+                        <button onClick={() => setActiveSubmenu("bone color")}>Bone Color</button>
+                        <button onClick={() => setActiveSubmenu("staining")}>Staining</button>
+                        <button onClick={() => setActiveSubmenu("surface damage")}>Surface Damage</button>
+                        <button onClick={() => setActiveSubmenu("adherent materials")}>Adherent Materials</button>
+                        <button onClick={() => setActiveSubmenu("modifications")}>Modifications</button>
+                    </div>
+                    <div className="">
+                        <button onClick={() => setActiveSubmenu("comments")}>Comments</button>
+                    </div>
                 </div>
                 {getContents()}
             </div>);

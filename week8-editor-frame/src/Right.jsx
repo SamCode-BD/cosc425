@@ -5,14 +5,14 @@ import "./Toolbar.css"
 import React, {useState} from 'react'
 
 function Right() {
-    let toolbarSubContext = useState("");
+    let editorWindowContext = useState("");
 
     let taphonomyState = useState(false);
     let setTaphonomyActive = taphonomyState[1];
 
     return(<div className = "right">
-        <Toolbar toolbarSubContext={toolbarSubContext} setTaphonomyActive={setTaphonomyActive}/>
-        <EditorContainer toolbarSubContext={toolbarSubContext} taphonomyState={taphonomyState}/>
+        <Toolbar editorWindowContext={editorWindowContext} setTaphonomyActive={setTaphonomyActive}/>
+        <EditorContainer editorWindowContext={editorWindowContext} taphonomyState={taphonomyState}/>
     </div>);
 }
 export default Right

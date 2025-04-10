@@ -2,6 +2,7 @@ import "./EditorContainer.css"
 import CMEditor from "./CMEditor.jsx"
 import CNEditor from "./CNEditor.jsx"
 import CInventory from "./CInventory.jsx"
+import PostcranialMetrics from "./PostcranialMetrics.jsx"
 import AxialInventory from "./AxialInventory.jsx"
 import AppendicularInventory from "./AppendicularInventory.jsx"
 import HandsFeetInventory from "./HandsFeetInventory.jsx"
@@ -12,7 +13,7 @@ export const InventoryContext = createContext();
 
 
 function EditorContainer(props){
-    let [toolbarSubContext, _] = props.toolbarSubContext;
+    let [editorWindowContext, _] = props.editorWindowContext;
 
 
     let [taphonomyActive, setTaphonomyActive] = props.taphonomyState;
@@ -28,17 +29,17 @@ function EditorContainer(props){
         setActiveBone: setActiveBone
     }
 
-    if(toolbarSubContext == "craniometrics") {
+    if(editorWindowContext == "craniometrics") {
         return(<div className = "editor-container">
             <CMEditor/>
         </div>);
     }
-    else if(toolbarSubContext == "cranial nonmetrics") {
+    else if(editorWindowContext == "cranial nonmetrics") {
         return(<div className = "editor-container">
             <CNEditor/>
         </div>)
     }
-    else if(toolbarSubContext == "cranial inventory") {
+    else if(editorWindowContext == "cranial inventory") {
         
         return(<div className = "editor-container">
                 <div className = "editor-window inv-taph">
@@ -51,7 +52,12 @@ function EditorContainer(props){
             
         </div>)
     }
-    else if(toolbarSubContext == "axial") {
+    else if(editorWindowContext == "postcranial-metrics") {
+        return(<div className="editor-container">
+            <PostcranialMetrics/>
+        </div>)
+    }
+    else if(editorWindowContext == "axial") {
         return(<div className = "editor-container">
                 <div className = "editor-window inv-taph">
                     <InventoryContext.Provider value={inventoryContext}>
@@ -62,7 +68,7 @@ function EditorContainer(props){
                 </div>
         </div>)
     }
-    else if(toolbarSubContext == "appendicular") {
+    else if(editorWindowContext == "appendicular") {
         return(<div className = "editor-container">
                 <div className = "editor-window inv-taph">
                     <InventoryContext.Provider value={inventoryContext}>
@@ -74,7 +80,7 @@ function EditorContainer(props){
             </div>
         )
     }
-    else if(toolbarSubContext == "hands and feet") {
+    else if(editorWindowContext == "hands and feet") {
         return(<div className = "editor-container">
                 <div className = "editor-window inv-taph">
                     <InventoryContext.Provider value={inventoryContext}>

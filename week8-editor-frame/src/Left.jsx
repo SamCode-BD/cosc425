@@ -1,6 +1,6 @@
 import "./Left.css"
 import React, {useState} from 'react'
-
+import TaxLocModal from "./Modal/TaxLocModal";
 
 
 
@@ -35,7 +35,9 @@ function Left() {
                     <option>Unknown</option>
                 </select>
         </div>
-        <div className = "tax-button"><button>Taxonomy/Locality</button></div>
+        <div className = "tax-button">
+            <TaxLocModal/>
+        </div>
         <div className = "save-button"><button>Save</button></div>
     </div>);
 }

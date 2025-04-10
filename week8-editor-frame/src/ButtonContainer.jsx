@@ -3,7 +3,7 @@ import React, {useState} from 'react'
 
 function ButtonContainer(props) {
 
-    let [toolbarSubContext, setToolbarSubContext] = props.toolbarSubContext;
+    let [editorWindowContext, setEditorWindowContext] = props.editorWindowContext;
     let [toolbarContext, setToolbarContext] = useState("main");
 
     if(toolbarContext == "main") {
@@ -15,7 +15,7 @@ function ButtonContainer(props) {
                     <button onClick={() => setToolbarContext("postcranial")}>Postcranial</button>
                 </div>
                 <div className = "toolbar-button">
-                    <button>Dental</button>
+                    <button onClick={() => setToolbarContext("dental")}>Dental</button>
                 </div>
         </div>)
     }
@@ -23,17 +23,17 @@ function ButtonContainer(props) {
         return(<div className = "button-container">
             <div className = "toolbar-button">
                 <button onClick={() => {setToolbarContext("main"); 
-                                        setToolbarSubContext("");
+                                        setEditorWindowContext("");
                                         props.setTaphonomyActive(false)}}>Back</button>
             </div>
             <div className = "toolbar-button">
-                <button onClick={() => setToolbarSubContext("craniometrics")}>Craniometrics</button>
+                <button onClick={() => setEditorWindowContext("craniometrics")}>Craniometrics</button>
             </div>
             <div className = "toolbar-button">
-                <button onClick={() => setToolbarSubContext("cranial nonmetrics")}>Cranial Nonmetrics</button>
+                <button onClick={() => setEditorWindowContext("cranial nonmetrics")}>Cranial Nonmetrics</button>
             </div>
             <div className = "toolbar-button">
-                <button onClick={() => setToolbarSubContext("cranial inventory")}>Inventory</button>
+                <button onClick={() => setEditorWindowContext("cranial inventory")}>Inventory</button>
             </div>
     </div>)
     }
@@ -41,19 +41,49 @@ function ButtonContainer(props) {
         return(<div className = "button-container">
             <div className = "toolbar-button">
                 <button onClick={() => {setToolbarContext("main"); 
-                                        setToolbarSubContext("");
+                                        setEditorWindowContext("");
                                         props.setTaphonomyActive(false)}}>Back</button>
             </div>
             <div className = "toolbar-button">
-                <button onClick={() => setToolbarSubContext("axial")}>Axial</button>
+                <button onClick={() => setEditorWindowContext("postcranial-metrics")}>Postcranial Metrics</button>
             </div>
             <div className = "toolbar-button">
-                <button onClick={() => setToolbarSubContext("appendicular")}>Appendicular</button>
-            </div>
-            <div className = "toolbar-button">
-                <button onClick={() => setToolbarSubContext("hands and feet")}>Hands and Feet</button>
+                <button onClick={() => setToolbarContext("postcranial-inventory")}>Postcranial Inventory</button>
             </div>
         </div>)
+    }
+    else if(toolbarContext == "postcranial-inventory") {
+        return(<div className = "button-container">
+            <div className = "toolbar-button">
+                <button onClick={() => {setToolbarContext("postcranial"); 
+                                        setEditorWindowContext("");
+                                        props.setTaphonomyActive(false)}}>Back</button>
+            </div>
+            <div className = "toolbar-button">
+                <button onClick={() => setEditorWindowContext("axial")}>Axial</button>
+            </div>
+            <div className = "toolbar-button">
+                <button onClick={() => setEditorWindowContext("appendicular")}>Appendicular</button>
+            </div>
+            <div className = "toolbar-button">
+                <button onClick={() => setEditorWindowContext("hands and feet")}>Hands and Feet</button>
+            </div>
+        </div>)
+    }
+    else if(toolbarContext == "dental") {
+        return <div className = "button-container">
+            <div className = "toolbar-button">
+                <button onClick={() => {setToolbarContext("main"); 
+                                        setEditorWindowContext("");
+                                        props.setTaphonomyActive(false)}}>Back</button>
+            </div>
+            <div className = "toolbar-button">
+                <button onClick={() => setEditorWindowContext("dental-inventory")}>Dental Inventory</button>
+            </div>
+            <div className = "toolbar-button">
+                <button onClick={() => setEditorWindowContext("morphology")}>Morphology</button>
+            </div>
+        </div>
     }
     else {
         return(<></>)
