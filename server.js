@@ -4,16 +4,17 @@ const app = express();
 const bcrypt = require('bcrypt');
 const port = 3000;
 const jwt = require('jsonwebtoken');
-const SECRET_KEY = 'SecretKey';
+
+// **Use environment variable for SECRET_KEY**
+const SECRET_KEY = process.env.JWT_SECRET || 'SecretKey'; // Default value for local development
 
 // MySQL connection setup
 const db = mysql.createConnection({
-  host: 'sql5.freesqldatabase.com',
-  user: 'sql5764904',
-  password: 'ZhPF13x6SU',
-  database: 'sql5764904',
+  host: process.env.DB_HOST || 'sql5.freesqldatabase.com',
+  user: process.env.DB_USER || 'sql5764904',
+  password: process.env.DB_PASSWORD || 'ZhPF13x6SU',
+  database: process.env.DB_DATABASE || 'sql5764904',
 });
-
 
 db.connect((err) => {
   if (err) {
@@ -37,36 +38,36 @@ app.post('/specimens', (req, res) => { /* ... */ });
 
 // --- Specimen Route (New - GET individual specimen) ---
 app.get('/specimens/:id', (req, res) => {
-    const specimenId = req.params.id;
-    db.query('SELECT * FROM specimen WHERE specimen_id = ?', [specimenId], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        if (results.length === 0) {
-            return res.status(404).json({ message: 'Specimen not found' });
-        }
-        res.json(results);
-    });
+  const specimenId = req.params.id;
+  db.query('SELECT * FROM specimen WHERE specimen_id = ?', [specimenId], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Specimen not found' });
+    }
+    res.json(results);
+  });
 });
 
 // --- Specimen Route (New - PUT to update a specimen) ---
 app.put('/specimens/:id', (req, res) => {
-    const specimenId = req.params.id;
-    const { specimen_name, specimen_number, country, locality, region, sex, user_id } = req.body;
-    if (!specimen_name || !specimen_number || !country || !locality || !region || !sex || !user_id) {
-        return res.status(400).json({ message: 'SpecimenName, SpecimenNumber, Country, Locality, Region, Sex, and UserID are required' });
-    }
-    db.query('UPDATE specimen SET specimen_name = ?, specimen_number = ?, country = ?, locality = ?, region = ?, sex = ?, user_id = ? WHERE specimen_id = ?',
-        [specimen_name, specimen_number, country, locality, region, sex, user_id, specimenId],
-        (err, result) => {
-            if (err) {
-                return res.status(500).json({ error: err.message });
-            }
-            if (result.affectedRows === 0) {
-                return res.status(404).json({ message: 'Specimen not found' });
-            }
-            res.json({ message: 'Specimen updated successfully', specimen_id: specimenId, specimen_name, specimen_number });
-        });
+  const specimenId = req.params.id;
+  const { specimen_name, specimen_number, country, locality, region, sex, user_id } = req.body;
+  if (!specimen_name || !specimen_number || !country || !locality || !region || !sex || !user_id) {
+    return res.status(400).json({ message: 'SpecimenName, SpecimenNumber, Country, Locality, Region, Sex, and UserID are required' });
+  }
+  db.query('UPDATE specimen SET specimen_name = ?, specimen_number = ?, country = ?, locality = ?, region = ?, sex = ?, user_id = ? WHERE specimen_id = ?',
+    [specimen_name, specimen_number, country, locality, region, sex, user_id, specimenId],
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ message: 'Specimen not found' });
+      }
+      res.json({ message: 'Specimen updated successfully', specimen_id: specimenId, specimen_name, specimen_number });
+    });
 });
 
 // --- Bone Routes (Existing) ---
@@ -75,77 +76,78 @@ app.post('/bones', (req, res) => { /* ... */ });
 
 // --- Bone Route (New - GET individual bone with appendicular measurements) ---
 app.get('/bones/:id', (req, res) => {
-    const boneId = req.params.id;
-    db.query(`
-        SELECT bone.*,
-               appendicular_measurements.clavicle_maximum_length,
-               appendicular_measurements.clavicle_anterior_diameter_at_midshaft,
-               appendicular_measurements.scapula_height
-        FROM bone
-        LEFT JOIN appendicular_measurements ON bone.bone_id = appendicular_measurements.bone_id
-        WHERE bone.bone_id = ?
-    `, [boneId], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        if (results.length === 0) {
-            return res.status(404).json({ message: 'Bone not found' });
-        }
-        res.json(results);
-    });
+  const boneId = req.params.id;
+  db.query(`
+    SELECT bone.*,
+           appendicular_measurements.clavicle_maximum_length,
+           appendicular_measurements.clavicle_anterior_diameter_at_midshaft,
+           appendicular_measurements.scapula_height
+    FROM bone
+    LEFT JOIN appendicular_measurements ON bone.bone_id = appendicular_measurements.bone_id
+    WHERE bone.bone_id = ?
+  `, [boneId], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Bone not found' });
+    }
+    res.json(results);
+  });
 });
 
 // --- Bone Route (New - PUT to update a bone and its appendicular measurements) ---
 app.put('/bones/:id', (req, res) => {
-    const boneId = req.params.id;
-    const { bone_name, bone_type, condition, specimen_id, appendicular_measurements } = req.body;
-    if (!bone_name || !bone_type || !condition || !specimen_id || !appendicular_measurements) {
-        return res.status(400).json({ message: 'BoneName, BoneType, Condition, SpecimenID, and Appendicular Measurements are required' });
+  const boneId = req.params.id;
+  const { bone_name, bone_type, condition, specimen_id, appendicular_measurements } = req.body;
+  if (!bone_name || !bone_type || !condition || !specimen_id || !appendicular_measurements) {
+    return res.status(400).json({ message: 'BoneName, BoneType, Condition, SpecimenID, and Appendicular Measurements are required' });
+  }
+
+  // First, check if the bone exists
+  db.query('SELECT * FROM bone WHERE bone_id = ?', [boneId], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Bone not found' });
     }
 
-    // First, check if the bone exists
-    db.query('SELECT * FROM bone WHERE bone_id = ?', [boneId], (err, results) => {
-        if (err) {
+    // Then, check if the specimen_id exists
+    db.query('SELECT * FROM specimen WHERE specimen_id = ?', [specimen_id], (err, results) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      if (results.length === 0) {
+        return res.status(400).json({ message: 'SpecimenID does not exist in the specimen table' });
+      }
+
+      // Update the bone table
+      db.query('UPDATE bone SET bone_name = ?, bone_type = ?, `condition` = ?, specimen_id = ? WHERE bone_id = ?',
+        [bone_name, bone_type, condition, specimen_id, boneId],
+        (err, result) => {
+          if (err) {
             return res.status(500).json({ error: err.message });
-        }
-        if (results.length === 0) {
-            return res.status(404).json({ message: 'Bone not found' });
-        }
+          }
 
-        // Then, check if the specimen_id exists
-        db.query('SELECT * FROM specimen WHERE specimen_id = ?', [specimen_id], (err, results) => {
+          // Update appendicular measurements (assuming only one set of measurements per bone for simplicity in this example)
+          const { clavicle_maximum_length, clavicle_anterior_diameter_at_midshaft, scapula_height } = appendicular_measurements || {};
+
+          db.query(`
+            UPDATE appendicular_measurements
+            SET clavicle_maximum_length = ?,
+                clavicle_anterior_diameter_at_midshaft = ?,
+                scapula_height = ?
+            WHERE bone_id = ?
+          `, [clavicle_maximum_length, clavicle_anterior_diameter_at_midshaft, scapula_height, boneId], (err, result) => {
             if (err) {
-                return res.status(500).json({ error: err.message });
+              return res.status(500).json({ error: err.message });
             }
-            if (results.length === 0) {
-                return res.status(400).json({ message: 'SpecimenID does not exist in the specimen table' });
-            }
-
-            // Update the bone table
-            db.query('UPDATE bone SET bone_name = ?, bone_type = ?, `condition` = ?, specimen_id = ? WHERE bone_id = ?',
-                [bone_name, bone_type, condition, specimen_id, boneId],
-                (err, result) => {
-                    if (err) {
-                        return res.status(500).json({ error: err.message });
-                    }
-
-                    // Update appendicular measurements (assuming only one set of measurements per bone for simplicity in this example)
-                    const { clavicle_maximum_length, clavicle_anterior_diameter_at_midshaft, scapula_height } = appendicular_measurements || {};
-                    db.query(`
-                        UPDATE appendicular_measurements
-                        SET clavicle_maximum_length = ?,
-                            clavicle_anterior_diameter_at_midshaft = ?,
-                            scapula_height = ?
-                        WHERE bone_id = ?
-                    `, [clavicle_maximum_length, clavicle_anterior_diameter_at_midshaft, scapula_height, boneId], (err, result) => {
-                        if (err) {
-                            return res.status(500).json({ error: err.message });
-                        }
-                        res.json({ message: 'Bone updated successfully', id: boneId, bone_name, bone_type, condition, specimen_id, appendicular_measurements });
-                    });
-                });
+            res.json({ message: 'Bone updated successfully', id: boneId, bone_name, bone_type, condition, specimen_id, appendicular_measurements });
+          });
         });
     });
+  });
 });
 
 // --- Other Routes (Conditions, Taphonomy, etc.) ---
@@ -159,52 +161,48 @@ app.get('/museums', (req, res) => { /* ... */ });
 app.get('/users', (req, res) => { /* ... */ });
 app.post('/users', (req, res) => { /* ... */ });
 
-// --- Start the server (as in the original code) ---
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-});
 app.post('/users', async (req, res) => {
   const { name, email, password, roles } = req.body;
 
   // Input validation
   if (!name || !email || !password || !roles) {
-      return res.status(400).json({ message: 'Name, Email, Password, and Roles are required' });
+    return res.status(400).json({ message: 'Name, Email, Password, and Roles are required' });
   }
 
   // Validate email format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
-      return res.status(400).json({ message: 'Invalid email format' });
+    return res.status(400).json({ message: 'Invalid email format' });
   }
 
   // Validate password strength (example: minimum 8 characters)
   if (password.length < 8) {
-      return res.status(400).json({ message: 'Password must be at least 8 characters long' });
+    return res.status(400).json({ message: 'Password must be at least 8 characters long' });
   }
 
   try {
-      // Hash the password
-      const hashedPassword = await bcrypt.hash(password, 10); // 10 salt rounds
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10); // 10 salt rounds
 
-      // Insert into database
-      db.query('INSERT INTO user (name, email, password, roles) VALUES (?, ?, ?, ?)', 
-          [name, email, hashedPassword, roles], 
-          (err, result) => {
-              if (err) {
-                  // Handle unique email constraint or other errors
-                  if (err.code === 'ER_DUP_ENTRY') {
-                      return res.status(400).json({ message: 'Email is already in use' });
-                  }
-                  return res.status(500).json({ error: 'Database error' });
-              }
-
-              // Send back the response without sending sensitive data like password
-              res.status(201).json({ id: result.insertId, name, email, roles });
+    // Insert into database
+    db.query('INSERT INTO user (name, email, password, roles) VALUES (?, ?, ?, ?)',
+      [name, email, hashedPassword, roles],
+      (err, result) => {
+        if (err) {
+          // Handle unique email constraint or other errors
+          if (err.code === 'ER_DUP_ENTRY') {
+            return res.status(400).json({ message: 'Email is already in use' });
           }
-      );
+          return res.status(500).json({ error: 'Database error' });
+        }
+
+        // Send back the response without sending sensitive data like password
+        res.status(201).json({ id: result.insertId, name, email, roles });
+      }
+    );
   } catch (error) {
-      console.error('Error hashing password:', error);
-      return res.status(500).json({ error: 'Error hashing password' });
+    console.error('Error hashing password:', error);
+    return res.status(500).json({ error: 'Error hashing password' });
   }
 });
 
@@ -212,34 +210,35 @@ app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-      return res.status(400).json({ message: 'Email and password are required' });
+    return res.status(400).json({ message: 'Email and password are required' });
   }
 
   db.query('SELECT * FROM user WHERE email = ?', [email], async (err, results) => {
-      if (err) {
-          return res.status(500).json({ error: err.message });
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    if (results.length === 0) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    const user = results; // assuming results returns an array of users
+
+    try {
+      const isPasswordMatch = await bcrypt.compare(password, user.password);
+
+      if (isPasswordMatch) {
+        // Issue JWT
+        // **Use the SECRET_KEY from environment variables**
+        const token = jwt.sign({ userId: user.user_id, email: user.email }, SECRET_KEY, { expiresIn: '1h' });
+        return res.status(200).json({ message: 'Login successful', token });
+      } else {
+        return res.status(401).json({ message: 'Invalid credentials' });
       }
-
-      if (results.length === 0) {
-          return res.status(401).json({ message: 'Invalid credentials' });
-      }
-
-      const user = results[0];  // assuming results returns an array of users
-
-      try {
-          const isPasswordMatch = await bcrypt.compare(password, user.password);
-
-          if (isPasswordMatch) {
-              // Issue JWT
-              const token = jwt.sign({ userId: user.user_id, email: user.email }, SECRET_KEY, { expiresIn: '1h' });
-              return res.status(200).json({ message: 'Login successful', token });
-          } else {
-              return res.status(401).json({ message: 'Invalid credentials' });
-          }
-      } catch (error) {
-          console.error('Error comparing passwords:', error);
-          return res.status(500).json({ error: 'Error during login' });
-      }
+    } catch (error) {
+      console.error('Error comparing passwords:', error);
+      return res.status(500).json({ error: 'Error during login' });
+    }
   });
 });
 
