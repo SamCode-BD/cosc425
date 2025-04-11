@@ -1,0 +1,57 @@
+
+.left {
+    background-color:hsl(0, 0%, 100%);
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: .5fr 1fr 5fr 2fr .5fr;
+    border-right: 2px solid black
+
+}
+
+.exit-button {
+    
+    color: rgb(0, 0, 0);
+    background-color:hsl(0, 0%, 100%);
+    display: inline-flex;           /* Enable flexbox */
+    justify-content: Left; /* Horizontally left */
+    white-space: nowrap;
+    grid-row: span 1;
+    grid-column: 1 / 2;
+}
+
+.title {
+    color: rgb(0, 0, 0);
+    background-color: hsl(0, 0%, 100%); 
+    border-bottom: 2px solid black;  /* Bottom border */
+    display: flex;           /* Enable flexbox */
+    justify-content: center; /* Horizontally center */
+    align-items: center;     /* Vertically center */
+    grid-row: span 1;
+    grid-column: 1 / 2;
+}
+
+.fields {
+    color: rgb(0, 0, 0);
+    border-bottom: 2px solid black;  /* Bottom border */
+    background-color: hsl(0, 0%, 100%);
+    grid-row: span 1;
+    grid-column: 1 / 2;
+}
+
+.tax-button {
+    color: rgb(0, 0, 0);
+    background-color: hsl(0, 0%, 90%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-row: span 1;
+    grid-column: 1 / 2;
+}
+
+.save-button {
+    color: rgb(0, 0, 0);
+    background-color: hsl(0, 0%, 90%);
+    border-top: 2px solid black;  /* Top border */
+    grid-row: span 1;
+    grid-column: 1 / 2;
+}

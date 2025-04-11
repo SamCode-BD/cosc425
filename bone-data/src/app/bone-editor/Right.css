@@ -1,0 +1,21 @@
+.right {
+    display: grid;
+    background-color: hsl(0, 0%, 44%);
+    /*
+    grid-template-columns: 1fr;
+    grid-template-rows: .5fr 8.5fr;
+    */
+}
+
+.header{
+    color: rgb(255, 255, 255);
+    border-bottom: 2px solid black;  /* Bottom border */
+    background-color: hsl(0, 0%, 100%);
+    grid-row: span 1;
+    grid-column: 1 / 2;
+}
+
+.container{
+    grid-row: span 1;
+    grid-column: 1 / 2;
+}
