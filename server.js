@@ -33,8 +33,12 @@ app.get('/', (req, res) => {
 });
 
 // --- Specimen Routes (Existing) ---
-app.get('/specimens', (req, res) => { /* ... */ });
-app.post('/specimens', (req, res) => { /* ... */ });
+app.get('/specimens', (req, res) => { 
+  res.json({ message: 'Specimen route placeholder' });
+});
+app.post('/specimens', (req, res) => { 
+  res.json({ message: 'Specimen post route placeholder' });
+});
 
 // --- Specimen Route (New - GET individual specimen) ---
 app.get('/specimens/:id', (req, res) => {
@@ -71,8 +75,12 @@ app.put('/specimens/:id', (req, res) => {
 });
 
 // --- Bone Routes (Existing) ---
-app.get('/bones', (req, res) => { /* ... */ });
-app.post('/bones', (req, res) => { /* ... */ });
+app.get('/bones', (req, res) => { 
+  res.json({ message: 'Bone route placeholder' });
+});
+app.post('/bones', (req, res) => { 
+  res.json({ message: 'Bone post route placeholder' });
+});
 
 // --- Bone Route (New - GET individual bone with appendicular measurements) ---
 app.get('/bones/:id', (req, res) => {
@@ -151,16 +159,35 @@ app.put('/bones/:id', (req, res) => {
 });
 
 // --- Other Routes (Conditions, Taphonomy, etc.) ---
-app.get('/conditions', (req, res) => { /* ... */ });
-app.post('/conditions', (req, res) => { /* ... */ });
-app.get('/taphonomy', (req, res) => { /* ... */ });
-app.post('/taphonomy', (req, res) => { /* ... */ });
-app.get('/surface-damage', (req, res) => { /* ... */ });
-app.post('/surface-damage', (req, res) => { /* ... */ });
-app.get('/museums', (req, res) => { /* ... */ });
-app.get('/users', (req, res) => { /* ... */ });
-app.post('/users', (req, res) => { /* ... */ });
+app.get('/conditions', (req, res) => { 
+  res.json({ message: 'Conditions route placeholder' });
+});
+app.post('/conditions', (req, res) => { 
+  res.json({ message: 'Conditions post route placeholder' });
+});
+app.get('/taphonomy', (req, res) => { 
+  res.json({ message: 'Taphonomy route placeholder' });
+});
+app.post('/taphonomy', (req, res) => { 
+  res.json({ message: 'Taphonomy post route placeholder' });
+});
+app.get('/surface-damage', (req, res) => { 
+  res.json({ message: 'Surface damage route placeholder' });
+});
+app.post('/surface-damage', (req, res) => { 
+  res.json({ message: 'Surface damage post route placeholder' });
+});
+app.get('/museums', (req, res) => { 
+  res.json({ message: 'Museums route placeholder' });
+});
+app.get('/users', (req, res) => { 
+  res.json({ message: 'Users route placeholder' });
+});
+app.post('/users', (req, res) => { 
+  res.json({ message: 'Users post route placeholder' });
+});
 
+// --- Signup Route ---
 app.post('/users', async (req, res) => {
   const { name, email, password, roles } = req.body;
 
@@ -206,6 +233,7 @@ app.post('/users', async (req, res) => {
   }
 });
 
+// --- Login Route ---
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -222,14 +250,13 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    const user = results; // assuming results returns an array of users
+    const user = results[0]; // Accessing the first user in the array
 
     try {
       const isPasswordMatch = await bcrypt.compare(password, user.password);
 
       if (isPasswordMatch) {
         // Issue JWT
-        // **Use the SECRET_KEY from environment variables**
         const token = jwt.sign({ userId: user.user_id, email: user.email }, SECRET_KEY, { expiresIn: '1h' });
         return res.status(200).json({ message: 'Login successful', token });
       } else {
