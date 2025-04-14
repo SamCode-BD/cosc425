@@ -1,0 +1,7 @@
+.right {
+    display: flex;
+    flex-direction: column;
+    background-color: hsl(0, 0%, 44%);
+    width: 80%;
+    height: 100%;
+}

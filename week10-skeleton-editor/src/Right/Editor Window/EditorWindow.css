@@ -1,0 +1,295 @@
+.editor-window {
+    background-color: hsl(0, 0%, 26%);
+    color: white;
+    width: auto;
+    height: 650px;
+    margin: 0;
+    text-align: center;
+    padding: 0;
+}
+
+.inv-taph {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 2fr;
+    grid-column-gap: 10px;
+}
+
+.editor-title {
+    font-size: 1.5em;
+    padding-block: 10px;
+    margin:0;
+    background-color: hsl(0, 0%, 15%);
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+.editor-context-buttons {
+    text-align: left;
+    margin:0;
+    padding-inline: 5%;
+}
+.editor-scroll {
+    text-align: left;
+    overflow-y: scroll;
+    max-height: 80%;
+    margin: 0;
+    padding-inline: 5%;
+}
+.metrics-list-entry {
+    padding: 10px;
+    background-color: hsl(0, 0%, 71%);
+    color: black;
+    display: grid;
+    grid-template-columns: 4fr 1fr 1fr 100px 1fr;
+    text-align: left;
+    border: 1px solid gray;
+}
+.metrics-list-entry .postcranial{
+    grid-template-columns: 4fr 2fr 100px 1fr 1fr;
+}
+.metrics-list-entry input {
+    height: 50px;
+    margin-block: auto;
+    width: 80%;
+}
+.inventory-entry {
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-columns: 5fr 8fr 2fr;
+    text-align: left;
+    border: 1px solid gray;
+    padding: 10px;
+    background-color: hsl(0, 0%, 89%);
+    color: black;
+}
+.appendicular {
+    grid-template-columns: repeat(6, 2fr);
+    justify-content: left;
+}
+.appendicular-boxes {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: 1fr 1fr 1fr;
+}
+.appendicular-boxes * {
+    margin:0;
+    padding-block:0;
+    padding-inline: 10px;
+}
+.inventory-entry button {
+    height: 20px;
+    width: min-content;
+    margin-top: 15px;
+    cursor: pointer;
+}
+.inventory {
+    background-color: gray;
+    color: black;
+    max-height: 650px;
+    display: flex;
+    flex-direction: column;
+}
+.inventory-buttons {
+    display: flex;
+    justify-content: flex-start;
+}
+.inventory-title {
+    font-family: Arial;
+    background-color: hsl(0, 0%, 15%);
+    color: white;
+}
+.inventory-scroll {
+    overflow-y: scroll;
+}
+.inventory-checkboxes {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    justify-content: center;
+}
+.inventory-options {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-rows: 1fr, 1fr;
+    grid-template-columns: 1fr, 1fr;
+    text-align: center;
+}
+.inventory-num-input {
+    margin: 0;
+    padding: 0;
+    display: grid; 
+    grid-auto-flow: row;
+}
+.inventory-num-input input {
+    margin-top: 15px;
+    width: 30px;
+    height: 20px;
+}
+
+.inventory-checkboxes p {
+    text-align: center;
+}
+.inventory-checkboxes * {
+    margin: 0;
+    padding: 0;
+}
+
+.taphonomy {
+    position: relative;
+    left: 75px;
+    top: 10%;
+    width: 600px;
+    height: 60%;
+    background-color: hsl(0, 0%, 87%);
+    color:black;
+    margin: 10px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 3fr 2fr 20fr;
+}
+.taphonomy-contents {
+    grid-row: 4 / 5;
+    border: 1px dashed black;
+}
+.tc-list {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-items: flex-start;
+    align-items: flex-start;
+}
+.tc-double {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+
+.taphonomy-title {
+    font-family: Arial;
+    background-color: hsl(0, 0%, 15%);
+    color: white;
+    grid-row: 1 / 2;
+}
+.condition-exposure {
+    grid-row: 2 / 3;
+    display: grid;
+    grid-auto-flow: row;
+    margin-inline: 10%;
+    width: 50%;
+    grid-template-columns: 2fr 1fr 2fr;
+    grid-template-rows: 1fr 1fr;
+    justify-items: left;
+}
+.condition-exposure-item {
+    margin-block: 5px;
+    padding: 0;
+    max-height: 50%;
+}
+.condition-input {
+    width: 20px;
+    height: 20px;
+    text-align: center;
+}
+.help-button {
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+    border: 1px solid black;
+    cursor: pointer;
+}
+.taphonomy-context-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-inline: 10px;
+    grid-row: 3 / 4;
+}
+.taphonomy-main-buttons {
+    display: flex;
+    justify-content: flex-start;
+}
+.taphonomy-comments-box {
+    height: 200px;
+    width: 400px;
+}
+.tc-comments {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+}
+.tc-comments * {
+    margin-inline: auto;
+    margin-block: 5px;
+}
+
+.mms-contents {
+    height: 580px;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-auto-flow: column;
+}
+.mms-contents * {
+    border: 1px dashed white;
+}
+.mms-left {
+    text-align: left;
+    display: flex;
+    flex-direction:column;
+}
+.mms-right {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+}
+.mms-image {
+    margin-top: 10px;
+    min-width: 300px;
+    max-width: 600px;
+    min-height: 300px;
+    max-height: 400px;
+    
+}
+.mms-code {
+    margin-top: 10px;
+    width: 350px;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.mms-code * {
+    margin-inline: 5px;
+}
+.mms-code-desc {
+    margin-top: 10px;
+    width: 450px;
+    height: 85px;
+}
+.mms-trait-list {
+    width: 100%;
+    height: 100%;
+}
+.mms-trait-desc {
+    width: 100%;
+    height: 100%;
+}
+.mms-trait-desc * {
+    width: 100%;
+    height: 100%;
+}
+.vertical-radio-button {
+    display: flex;
+    flex-direction: column;
+}
+.vertical-radio-button * {
+    flex-basis: 1;
+}
