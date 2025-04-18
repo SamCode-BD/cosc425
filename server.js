@@ -3,7 +3,6 @@ const mysql = require('mysql2');
 const app = express();
 const bcrypt = require('bcrypt');
 const port = 3000;
-const cors = require('cors');
 const jwt = require('jsonwebtoken');
 
 // **Use environment variable for SECRET_KEY**
