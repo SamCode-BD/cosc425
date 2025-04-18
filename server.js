@@ -23,6 +23,13 @@ db.connect((err) => {
     console.log('Connected to the database');
   }
 });
+const cors = require('cors');
+
+// Enable CORS for all domains or specific domains
+app.use(cors({
+  origin: 'https://1a9f13b1.cosc425.pages.dev'  //Testing Connection
+}));
+
 
 // Middleware to parse JSON bodies
 app.use(express.json());
