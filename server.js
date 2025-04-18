@@ -3,6 +3,7 @@ const mysql = require('mysql2');
 const app = express();
 const bcrypt = require('bcrypt');
 const port = 3000;
+const cors = require('cors');
 const jwt = require('jsonwebtoken');
 
 // **Use environment variable for SECRET_KEY**
@@ -27,7 +28,7 @@ const cors = require('cors');
 
 // Enable CORS for all domains or specific domains
 app.use(cors({
-  origin: 'https://1a9f13b1.cosc425.pages.dev'  //Testing Connection
+  origin: 'https://957d354f.cosc425.pages.dev/'  //Testing Connection
 }));
 
 
@@ -240,7 +241,7 @@ app.post('/users', async (req, res) => {
   }
 });
 
-// --- Login Route ---
+// --- LOGIN ROUTE ---
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -248,6 +249,7 @@ app.post('/login', async (req, res) => {
     return res.status(400).json({ message: 'Email and password are required' });
   }
 
+  // Find the user in the database
   db.query('SELECT * FROM user WHERE email = ?', [email], async (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
@@ -257,14 +259,20 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    const user = results[0]; // Accessing the first user in the array
+    const user = results[0];  // Accessing the first user in the array
 
     try {
+      // Compare the password
       const isPasswordMatch = await bcrypt.compare(password, user.password);
 
       if (isPasswordMatch) {
-        // Issue JWT
-        const token = jwt.sign({ userId: user.user_id, email: user.email }, SECRET_KEY, { expiresIn: '1h' });
+        // Issue JWT token if password matches
+        const token = jwt.sign(
+          { userId: user.user_id, email: user.email },
+          SECRET_KEY,
+          { expiresIn: '1h' }  // Token expiration
+        );
+
         return res.status(200).json({ message: 'Login successful', token });
       } else {
         return res.status(401).json({ message: 'Invalid credentials' });
