@@ -6,6 +6,8 @@ import PostcranialMetrics from "../Postcranial/PostcranialMetrics.jsx"
 import AxialInventory from "../Postcranial/AxialInventory.jsx"
 import AppendicularInventory from "../Postcranial/AppendicularInventory.jsx"
 import HandsFeetInventory from "../Postcranial/HandsFeetInventory.jsx"
+import DentalInventory from "../Dental/DentalInventory.jsx"
+import DeciduousInventory from "../Dental/DeciduousInventory.jsx"
 import Taphonomy from "../Taphonomy/Taphonomy.jsx"
 import React, {useState, createContext} from 'react'
 
@@ -90,6 +92,20 @@ function EditorContainer(props){
                     </InventoryContext.Provider>
                 </div>
         </div>)
+    }
+    else if(editorWindowContext =="permanent-inventory") {
+        return(<div className = "editor-container">
+                <div className = "editor-window">
+                    <DentalInventory type="permanent"/>
+                </div>
+        </div>)
+    }
+    else if(editorWindowContext == "deciduous-inventory") {
+        return(<div className = "editor-container">
+            <div className = "editor-window">
+               <DentalInventory type="deciduous"/>
+            </div>
+    </div>)
     }
     else {
         return(<div className = "editor-container">

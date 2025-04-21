@@ -78,10 +78,10 @@ function ButtonContainer(props) {
                                         props.setTaphonomyActive(false)}}>Back</button>
             </div>
             <div className = "toolbar-button">
-                <button onClick={() => setEditorWindowContext("dental-inventory")}>Dental Inventory</button>
+                <button onClick={() => setEditorWindowContext("permanent-inventory")}>Permanent Inventory</button>
             </div>
             <div className = "toolbar-button">
-                <button onClick={() => setEditorWindowContext("morphology")}>Morphology</button>
+                <button onClick={() => setEditorWindowContext("deciduous-inventory")}>Deciduous Inventory</button>
             </div>
         </div>
     }
