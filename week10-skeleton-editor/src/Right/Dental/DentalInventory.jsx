@@ -1,6 +1,7 @@
 import "./DentalInventory.css"
 import ToothInput from "./ToothInput"
 import HorizontalRadioButton from "/src/Right/Common/HorizontalRadioButton"
+import DentalTable from "./DentalTable"
 import {tooth_layout} from "./tooth_layout"
 import {morphology_list} from "./morphology_list"
 import {dental_help_text} from "./dental_help_text"
@@ -11,31 +12,37 @@ export default function DentalInventory(props) {
     let[windowType, setWindowType] = useState("inventory");
     let[tooth, selectTooth] = useState("No tooth selected");
     let[trait, selectTrait] = useState("Winging");
-    let[morphologyCategory, setMorphologyCategory] = useState("Maxillary");
 
-    const getMorphology = () => {
+    const commonTraits = Object.keys(morphology_list.options).slice(0, 6);
+    const maxillaryTraits = Object.keys(morphology_list.options).slice(6, 21);
+    const mandibularTraits = Object.keys(morphology_list.options).slice(21, 33);
+
+
+    const getLeft = () => {
         if(windowType == "morphology" && props.type == "permanent") {
-            return(<>
-            <p className="inventory-title">Morphology</p>
-            <button onClick={() => {setMorphologyCategory("Maxillary");}}>Maxillary</button>
-            <button onClick={() => {setMorphologyCategory("Mandibular");}}>Mandibular</button>
-            {getMorphologyRadioButtons()}
-            </>)
+            return(<div className="morphology-container">
+                <p className="morphology-title">Morphology</p>
+                <div className="morphology-radio-buttons">
+                    {commonTraits.map((trait, i) => 
+                        <HorizontalRadioButton key={i} name={trait} selectValue={() => selectTrait(trait)}/>)}
+                </div>
+                <h3 className="morphology-category">Maxillary</h3>
+                <div className="morphology-radio-buttons">
+                    {maxillaryTraits.map((trait, i) => 
+                        <HorizontalRadioButton key={i} name={trait} selectValue={() => selectTrait(trait)}/>)}
+                </div>
+                <h3 className="morphology-category">Mandibular</h3>
+                <div className="morphology-radio-buttons">
+                    {mandibularTraits.map((trait, i) => 
+                        <HorizontalRadioButton key={i} name={trait} selectValue={() => selectTrait(trait)}/>)}
+                </div>
+            </div>)
         }
-    }
-
-    const getMorphologyRadioButtons = () => {
-        if(morphologyCategory == "Maxillary") {
-            return(<>
-                {Object.keys(morphology_list.maxillary).map((trait, i) => 
-                    <HorizontalRadioButton key={i} name={trait} selectValue={() => selectTrait(trait)}/>)}
-            </>)
+        else if(windowType == "inventory" && props.type == "permanent") {
+            return(<DentalTable dentition="perm"/>)
         }
-        else if(morphologyCategory == "Mandibular") {
-            return(<>
-                {Object.keys(morphology_list.mandibular).map((trait, i) => 
-                    <HorizontalRadioButton key={i} name={trait} selectValue={() => selectTrait(trait)}/>)}
-            </>)
+        else if(windowType == "inventory" && props.type == "deciduous") {
+            return(<DentalTable dentition="dec"/>)
         }
     }
 
@@ -86,26 +93,14 @@ export default function DentalInventory(props) {
             else if(windowType == "morphology") {
                 //Need to get list of teeth to show from morphology_list
                 //Need to get list of where the boxes go in tooth_layout
-                if(morphologyCategory == "Maxillary") {
                 return(<>
-                    {morphology_list.maxillary[trait] &&
-                    morphology_list.maxillary[trait][1].map((toothName, i) => <>
+                    {morphology_list.options[trait] &&
+                    morphology_list.options[trait][1].map((toothName, i) => <>
                     <ToothInput side="R" name={toothName} selectTooth={selectTooth}/>
                     <ToothInput side="L" name={toothName} selectTooth={selectTooth}/>
                     </>
                     )
                     }</>)
-                }
-                else {
-                    return(<>
-                        {morphology_list.mandibular[trait] &&
-                        morphology_list.mandibular[trait][1].map((toothName, i) => <>
-                        <ToothInput side="R" name={toothName} selectTooth={selectTooth}/>
-                        <ToothInput side="L" name={toothName} selectTooth={selectTooth}/>
-                        </>
-                        )
-                        }</>)
-                }
             }
         }
         else if(props.type == "deciduous") {
@@ -137,8 +132,8 @@ export default function DentalInventory(props) {
 
     const getHelpText = () => {
         if(windowType == "morphology" && props.type == "permanent") {
-            //return <div>{morphology_list.help[0]}</div>
-            return <div>help text</div>
+            return morphology_list.help[trait] &&
+            morphology_list.help[trait];
         }
         else if(invType == "inventory") {
             return dental_help_text.inventory;
@@ -168,7 +163,7 @@ export default function DentalInventory(props) {
         </div>
     <div className="dental-inventory-layout">
         <div className="dental-3">
-            {getMorphology()}
+            {getLeft()}
         </div>
         
         <div className="dental-1">

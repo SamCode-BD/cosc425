@@ -13,12 +13,12 @@ export default function ToothInput(props) {
    
    if(props.dentition != "dec") {
       [x, y] = tooth_layout.perm[props.name];
-      xcenter = 910;
+      xcenter = 947;
       ycenter = 380;
    }
    else {
       [x, y] = tooth_layout.dec[props.name];
-      xcenter = 915;
+      xcenter = 930;
       ycenter = 380;
    }
 

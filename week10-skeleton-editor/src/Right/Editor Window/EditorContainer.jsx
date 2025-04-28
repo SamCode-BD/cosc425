@@ -7,7 +7,6 @@ import AxialInventory from "../Postcranial/AxialInventory.jsx"
 import AppendicularInventory from "../Postcranial/AppendicularInventory.jsx"
 import HandsFeetInventory from "../Postcranial/HandsFeetInventory.jsx"
 import DentalInventory from "../Dental/DentalInventory.jsx"
-import DeciduousInventory from "../Dental/DeciduousInventory.jsx"
 import Taphonomy from "../Taphonomy/Taphonomy.jsx"
 import React, {useState, createContext} from 'react'
 
